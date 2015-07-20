@@ -1,14 +1,15 @@
-;; User pack init file
-;;
-;; User this file to initiate the pack configuration.
-;; See README for more information.
 
-;; Load bindings config
+(setq default-buffer-file-coding-system 'utf-8-unix)
+
 
 (add-to-list 'load-path "~/.emacs.d/start")
 (add-to-list 'load-path "~/.emacs.d/lib")
 (add-to-list 'load-path "~/.emacs.d/lib/clojure-mode")
 (add-to-list 'load-path "~/.emacs.d/lib/theme")
+(add-to-list 'load-path "~/.emacs.d/lib/editor-config")
+
+(load "~/.emacs.d/lib/rainbow-delimiters.el")
+(require 'rainbow-delimiters)
 
 (require 'tomorrow-night-theme)
 (require 'emacs-modular-configuration)
@@ -41,6 +42,24 @@
 (delete-selection-mode 1)
 
 (setq-default indent-tabs-mode nil)
+
+(add-hook 'emacs-list-mode-hook #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+
+(require 'flycheck)
+
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers '(javascript-jshint)))
+
+(add-hook 'js2-mode-hook 'flycheck-mode)
+(add-hook 'js2-mode-hook #'rainbow-delimiters-mode-enable)
+
+
+;(require 'js2-mode)
+
+;; use eslint with web-mode for jsx files
+(flycheck-add-mode 'javascript-eslint 'js2-mode)
+
 ;;(require 'emacs-modular-configuration)
 ;; (add-to-list 'load-path "./config")
 ;; ;;(load (concat (live-pack-lib-dir) "tomorrow-night-theme.el"))
@@ -185,6 +204,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(js2-basic-offset 2)
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
