@@ -52,7 +52,7 @@
     (night-blue . ((background . "#002451")
                    (current-line . "#00346e")
                    (selection . "#003f8e")
-                   (foreground . "#ffffff")
+                   (foreground . "#eaeaea")
                    (comment . "#7285b7")
                    (red . "#ff9da4")
                    (orange . "#ffc58f")

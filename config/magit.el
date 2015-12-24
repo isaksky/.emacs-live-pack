@@ -15,7 +15,6 @@
   (setq magit-diff-options (remove "-w" magit-diff-options))
   (magit-refresh))
 
-(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
-			  ))
+(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)))
 
 

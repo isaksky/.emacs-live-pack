@@ -1,14 +1,24 @@
+; "I don't know which is right, I am just superstitious."
+(setq-default buffer-file-coding-system 'utf-8-unix)
+(setq-default default-buffer-file-coding-system 'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
+(prefer-coding-system 'utf-8-unix)
 
-(setq default-buffer-file-coding-system 'utf-8-unix)
+;; (setenv "PATH" (concat ";C:\\Users\\isak.sky\\AppData\\Local\\Programs\\Git\\usr\\bin" (getenv "PATH")))
+;; (add-to-list 'exec-path ";C:\\Users\\isak.sky\\AppData\\Local\\Programs\\Git\\usr\\bin;")
+
 
 
 (add-to-list 'load-path "~/.emacs.d/start")
 (add-to-list 'load-path "~/.emacs.d/lib")
 (add-to-list 'load-path "~/.emacs.d/lib/clojure-mode")
 (add-to-list 'load-path "~/.emacs.d/lib/theme")
-(add-to-list 'load-path "~/.emacs.d/lib/editor-config")
+
+
+(load "~/.emacs.d/lib/editor-config.el")
 
 (load "~/.emacs.d/lib/rainbow-delimiters.el")
+(load "~/.emacs.d/lib/git-find-file.el")
 (require 'rainbow-delimiters)
 
 (require 'tomorrow-night-theme)
@@ -18,13 +28,16 @@
 (scroll-bar-mode -1)
 (require 'clojure-mode)
 
+
+
 (require 'package)
+
 
 ;; (add-to-list 'package-archives
              ;; '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "https://melpa.milkbox.net/packages/") t)
 
 ;; (add-to-list 'package-archives 
 ;;     '("marmalade" .
@@ -47,6 +60,9 @@
 (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
 
 (require 'flycheck)
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
 (setq-default flycheck-disabled-checkers
   (append flycheck-disabled-checkers '(javascript-jshint)))
@@ -178,7 +194,65 @@
 ;; (defadvice sgml-delete-tag (after reindent-buffer activate)
 ;;   (indent-buffer))
 
+(defun git-grep-prompt ()
+  (let* ((default (current-word))
+         (prompt (if default (concat "Search for: (default " default ") ") "Search for: "))
+         (search (read-from-minibuffer prompt nil nil nil nil default))
+         ) (if (> (length search) 0) search (or default ""))))
+
+(defun git-grep (search) "git-grep the entire current repo"
+       (interactive (list (git-grep-prompt)))
+       (grep-find
+        (concat "git --no-pager grep -P -n "
+                (shell-quote-argument search)
+               ; (shell-quote-argument (shell-command "git rev-parse --show-toplevel"))
+                ;" `git rev-parse --show-toplevel`"
+                )))
+
+;(shell-quote-argument (shell-command "git rev-parse --show-toplevel"))
+
 ;; (setq live-disable-zone t) ;; frothing at the mouth about this
+
+(setq js2-indent-switch-body 2)
+
+(defun vc-git-grep2 (search)
+  (interactive
+   (progn
+     (vc-git-grep search "*" "."))))
+
+(defun vc-git-grep2 (regexp)
+  (interactive
+   (progn
+     (grep-compute-defaults)
+     (cond
+      ((equal current-prefix-arg '(16))
+       (list (read-from-minibuffer "Run: " "git grep" nil nil 'grep-history)
+    nil))
+      (t (let* ((regexp (grep-read-regexp))
+                (dir (read-directory-name "In directory: " nil default-directory t)))
+           (list regexp dir))))))
+  (require 'grep)
+  (when (and (stringp regexp) (> (length regexp) 0))
+    (let ((command regexp))
+      (if (> 4 5)
+    (if (string= command "git grep")
+     (setq command nil))
+  (setq dir (file-name-as-directory (expand-file-name dir)))
+  (setq command
+     (grep-expand-template "git grep -n -i -e <R>" regexp))
+  (when command
+    (if (equal current-prefix-arg '(4))
+     (setq command
+     (read-from-minibuffer "Confirm: " command nil nil 'grep-history))
+   (add-to-history 'grep-history command))))
+      (when command
+  (let ((default-directory dir)
+     (compilation-environment '("PAGER=")))
+    ;; Setting process-setup-function makes exit-message-function work
+    ;; even when async processes aren't supported.
+    (compilation-start command 'grep-mode))
+  (if (eq next-error-last-buffer (current-buffer))
+   (setq default-directory dir))))))
 
 ;(require 'paredit) ;if you didn't install via package.el
 ;(defun turn-on-paredit () (paredit-mode 1))
@@ -204,6 +278,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("52588047a0fe3727e3cd8a90e76d7f078c9bd62c0b246324e557dfa5112e0d0c" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" default)))
+ '(inhibit-startup-screen t)
  '(js2-basic-offset 2)
  '(tool-bar-mode nil))
 (custom-set-faces

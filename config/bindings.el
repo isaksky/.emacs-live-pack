@@ -1,8 +1,9 @@
 ;; Place personal bindings here
 (require 'paredit)
-;(define-key global-map (kbd "C-.") 'find-file-in-project)
-(define-key global-map (kbd "C-M-.") 'find-file-in-repository)
-;(define-key global-map (kbd "s-.") 'vc-git-grep)
+(define-key global-map (kbd "C-.") 'find-file-in-project)
+(define-key global-map (kbd "C-M-.") 'git-find-file)
+
+(define-key global-map (kbd "C-M-s") 'git-grep)
 
 (define-key global-map (kbd "s-}") 'next-buffer)
 (define-key global-map (kbd "s-{") 'previous-buffer)
@@ -70,8 +71,9 @@
             (define-key jsx-mode-map (kbd "C-c C-c") 'comment-or-uncomment-region-or-line)))
 
 (global-set-key (kbd "C-c C-r") 'replace-string)
-(global-set-key (kbd "C-c `") 'align-regexp)
+(define-key paredit-mode-map (kbd "C-c C-r") 'replace-string)
 
+(global-set-key (kbd "C-c `") 'align-regexp)
 
 (global-set-key (kbd "C-c w") 'paredit-splice-sexp-killing-backward)
 (global-set-key (kbd "C-c d") 'paredit-splice-sexp-killing-forward)
@@ -80,7 +82,8 @@
 (global-set-key (kbd "C-c b") 'paredit-backward-slurp-sexp)
 (define-key paredit-mode-map (kbd "C-w") 'paredit-backward-kill-word)
 
-
+(global-set-key [mouse-5] 'switch-to-next-buffer)
+(global-set-key [mouse-4] 'switch-to-prev-buffer)
 
 
 

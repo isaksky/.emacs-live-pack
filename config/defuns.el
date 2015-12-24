@@ -52,3 +52,25 @@ e.g. `HelloWorldString'."
             (setq beg (line-beginning-position) end (line-end-position)))
         (comment-or-uncomment-region beg end)))
 
+(defun git-grep-prompt ()
+  (let* ((default (current-word))
+         (prompt (if default (concat "Search for: (default " default ") ") "Search for: "))
+         (search (read-from-minibuffer prompt nil nil nil nil default))
+         ) (if (> (length search) 0) search (or default ""))))
+
+(defun git-grep (search) "git-grep the entire current repo"
+       (interactive (list (git-grep-prompt)))
+       (grep-find
+        (concat "git --no-pager grep -P -n "
+                (shell-quote-argument search))))
+
+(defun win-cmd-escape-argument (arg)
+  (replace-regexp-in-string " " "^ " arg))
+
+(defun findstr (search) "git-grep the entire current repo"
+       (interactive (list (git-grep-prompt)))
+       (grep
+        (concat "findstr /n /i /s \""
+                (win-cmd-escape-argument search)
+                "\" "
+               "\"C:\\ssd\\Source\\Projects\\Xledger Development\\Xledger\\X.Web\\Public\\*\"")))
