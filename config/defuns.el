@@ -73,4 +73,4 @@ e.g. `HelloWorldString'."
         (concat "findstr /n /i /s \""
                 (win-cmd-escape-argument search)
                 "\" "
-               "\"C:\\ssd\\Source\\Projects\\Xledger Development\\Xledger\\X.Web\\Public\\*\"")))
+                "\"C:\\ssd\\Source\\Projects\\Xledger Development\\Xledger\\X.Web\\Public\\*\";")))

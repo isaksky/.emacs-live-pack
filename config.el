@@ -166,6 +166,17 @@ e.g. `HelloWorldString'."
        (grep-find
         (concat "git --no-pager grep -P -n "
                 (shell-quote-argument search))))
+
+(defun win-cmd-escape-argument (arg)
+  (replace-regexp-in-string " " "^ " arg))
+
+(defun findstr (search) "git-grep the entire current repo"
+       (interactive (list (git-grep-prompt)))
+       (grep
+        (concat "findstr /n /i /s \""
+                (win-cmd-escape-argument search)
+                "\" "
+               "\"C:\\ssd\\Source\\Projects\\Xledger Development\\Xledger\\X.Web\\Public\\*\"")))
 ;; ############################################################################
 
 
@@ -188,8 +199,7 @@ e.g. `HelloWorldString'."
   (setq magit-diff-options (remove "-w" magit-diff-options))
   (magit-refresh))
 
-(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
-			  ))
+(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)))
 
 
 ;; ############################################################################

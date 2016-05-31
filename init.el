@@ -8,6 +8,8 @@
 ;; (add-to-list 'exec-path ";C:\\Users\\isak.sky\\AppData\\Local\\Programs\\Git\\usr\\bin;")
 
 
+(setenv "PATH" (concat (getenv "PATH") ":C:/Users/isak.sky/AppData/Local/Programs/Git/usr/bin"))
+(setq exec-path (append exec-path '("C:/Users/isak.sky/AppData/Local/Programs/Git/usr/bin")))
 
 (add-to-list 'load-path "~/.emacs.d/start")
 (add-to-list 'load-path "~/.emacs.d/lib")
@@ -281,6 +283,7 @@
  '(custom-safe-themes
    (quote
     ("52588047a0fe3727e3cd8a90e76d7f078c9bd62c0b246324e557dfa5112e0d0c" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" default)))
+ '(dired-auto-revert-buffer t)
  '(inhibit-startup-screen t)
  '(js2-basic-offset 2)
  '(tool-bar-mode nil))
