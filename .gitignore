@@ -28,3 +28,5 @@ elpa/
 ido.last
 recentf
 server/
+eshell/
+smex-items
