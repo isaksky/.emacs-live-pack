@@ -94,8 +94,11 @@
 (global-set-key [mouse-5] 'switch-to-next-buffer)
 (global-set-key [mouse-4] 'switch-to-prev-buffer)
 
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-
+(global-set-key (kbd "<f1>") 'ace-jump-mode)
+(global-set-key (kbd "<f4>") 'kill-this-buffer)
 ;; ############################################################################
 
 
@@ -166,6 +169,26 @@ e.g. `HelloWorldString'."
        (grep-find
         (concat "git --no-pager grep -P -n "
                 (shell-quote-argument search))))
+
+(defun win-cmd-escape-argument (arg)
+  (replace-regexp-in-string " " "^ " arg))
+
+(defun findstr (search) "git-grep the entire current repo"
+       (interactive (list (git-grep-prompt)))
+       (grep
+        (concat "findstr /n /i /s \""
+                (win-cmd-escape-argument search)
+                "\" "
+               "\"C:\\ssd\\Source\\Projects\\Xledger Development\\Xledger\\X.Web\\Public\\*\"")))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/fsharp-mode.el
+;(require 'fsharp-mode)
+
+;(define-key fsharp-mode-map (kbd "C-c r") nil) ; fuuuuuuuuuuuuuuuuuuuuuuuu
+;(define-key fsharp-mode-map (kbd "C-c C-c") nil)
 ;; ############################################################################
 
 
@@ -188,8 +211,7 @@ e.g. `HelloWorldString'."
   (setq magit-diff-options (remove "-w" magit-diff-options))
   (magit-refresh))
 
-(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)
-			  ))
+(define-key magit-status-mode-map (kbd "W") 'magit-toggle-whitespace)))
 
 
 ;; ############################################################################

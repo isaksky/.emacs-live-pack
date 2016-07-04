@@ -28,25 +28,50 @@
 (scroll-bar-mode -1)
 (require 'clojure-mode)
 
-
+(setq create-lockfiles nil) 
 
 (require 'package)
-
-
+;(require 'smex)
+;(smex-initialize)
 ;; (add-to-list 'package-archives
              ;; '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
 
 ;; (add-to-list 'package-archives 
 ;;     '("marmalade" .
 ;;       "http://marmalade-repo.org/packages/"))
 (package-initialize)
-(require 'exec-path-from-shell)
 
 (unless (package-installed-p 'cider)
   (package-install 'cider))
+(require 'elixir-mode)
+(require 'smartparens)
+
+(add-to-list 'elixir-mode-hook
+             (defun auto-activate-ruby-end-mode-for-elixir-mode ()
+               (set (make-variable-buffer-local 'ruby-end-expand-keywords-before-re)
+                    "\\(?:^\\|\\s-+\\)\\(?:do\\)")
+               (set (make-variable-buffer-local 'ruby-end-check-statement-modifiers) nil)
+               (ruby-end-mode +1)))
+
+(sp-with-modes '(elixir-mode)
+  (sp-local-pair "fn" "end"
+         :when '(("SPC" "RET"))
+         :actions '(insert navigate))
+  (sp-local-pair "do" "end"
+         :when '(("SPC" "RET"))
+         :post-handlers '(sp-ruby-def-post-handler)
+         :actions '(insert navigate)))
+
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.eex\\'" . web-mode))
+
 
 (color-theme-tomorrow-night-blue)
 
@@ -60,6 +85,9 @@
 (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
 
 (require 'flycheck)
+(add-hook 'elixir-mode-hook 'flycheck-mode)
+(add-hook 'elixir-mode-hook 'alchemist-mode)
+
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 ;(global-set-key (kbd "C-x C-f") 'helm-find-files)
@@ -70,6 +98,7 @@
 (add-hook 'js2-mode-hook 'flycheck-mode)
 (add-hook 'js2-mode-hook #'rainbow-delimiters-mode-enable)
 
+(add-hook 'dired-mode-hook 'dired-hide-details-mode)
 
 ;(require 'js2-mode)
 
@@ -281,6 +310,7 @@
  '(custom-safe-themes
    (quote
     ("52588047a0fe3727e3cd8a90e76d7f078c9bd62c0b246324e557dfa5112e0d0c" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" default)))
+ '(fsharp-indent-level 2)
  '(inhibit-startup-screen t)
  '(js2-basic-offset 2)
  '(tool-bar-mode nil))

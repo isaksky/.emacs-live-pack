@@ -85,5 +85,8 @@
 (global-set-key [mouse-5] 'switch-to-next-buffer)
 (global-set-key [mouse-4] 'switch-to-prev-buffer)
 
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-
+(global-set-key (kbd "<f1>") 'ace-jump-mode)
+(global-set-key (kbd "<f4>") 'kill-this-buffer)
